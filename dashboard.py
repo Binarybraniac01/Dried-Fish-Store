@@ -580,7 +580,7 @@ class Dashboardcls(Tk):
     def establish_connection(self):
         """Function for establishing connection with MySQl Database"""
         try:
-            self.connection = mysql.connector.connect(host="localhost", user="root", password="1234",
+            self.connection = mysql.connector.connect(host="localhost", user="root", password="root",
                                                       port="3306", database="FishData")
             self.cursor = self.connection.cursor()
         except Exception as server_error:
