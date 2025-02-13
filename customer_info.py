@@ -7,8 +7,17 @@ class Customercls(Tk):
     def __init__(self):
         super().__init__()
 
-        self.width = 1450
-        self.height = 770
+        # Get screen width and height
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
+
+        # Set window size to 60% of screen width and 70% of screen height
+        self.width = int(screen_width * 0.95)
+        self.height = int(screen_height * 0.9)
+
+        # Center the window
+        self.x_offset = (screen_width - self.width) // 2
+        self.y_offset = (screen_height - self.height) // 2
 
         self.resizable(FALSE, FALSE)
         self.minsize(self.width, self.height)
@@ -36,15 +45,15 @@ class Customercls(Tk):
 
 
     def setgeometry(self):
-        self.geometry(f"{self.width}x{self.height}+{43}+{5}")
+        self.geometry(f"{self.width}x{self.height}+{self.x_offset}+{self.y_offset}")
 
 
     def set_cust_frames(self):
-        self.ParentFrame = Frame(self, height=770, width=1450,bg="#DFD7BF")
+        self.ParentFrame = Frame(self, height=self.height, width=self.width,bg="#DFD7BF")
         self.ParentFrame.place(x=0, y=146)
 
     def sub_frame_1(self):
-        self.child_1 = Frame(self.ParentFrame, height=770, width=1450, bg="#DFD7BF")
+        self.child_1 = Frame(self.ParentFrame, height=self.height, width=self.width, bg="#DFD7BF")
         self.child_1.place(x=1, y=2)
 
     # def sub_frame_2(self):
@@ -90,17 +99,17 @@ class Customercls(Tk):
     def search_bar(self):
 
         self.search_Lable = Label(self.child_1,text="Search Customer By Name :",font=("Poor Richard", 20, "bold"),borderwidth=0,bg="#DFD7BF")
-        self.search_Lable.place(x=700,y=60)
+        self.search_Lable.place(x=650,y=60)
 
         self.search_Lable_entry = Entry(self.child_1,textvariable=self.cust_search,font=("comic", 20),borderwidth=0)
-        self.search_Lable_entry.place(x=1020,y=60)
+        self.search_Lable_entry.place(x=970,y=60)
         self.search_Lable_entry.bind("<Key>",self.c_search)
 
 
     def Customer_table(self):
 
         self.P_frame = Frame(self.child_1,bd=3,bg="#DFD7BF")
-        self.P_frame.place(x=700,y=100,height=480,width=720)
+        self.P_frame.place(x=650,y=100,height=int(self.height * 0.55),width=int(self.width * 0.48))
 
         self.scollx = Scrollbar(self.P_frame,orient=HORIZONTAL)
         self.scolly = Scrollbar(self.P_frame, orient=VERTICAL)

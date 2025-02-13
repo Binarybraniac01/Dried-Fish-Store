@@ -18,8 +18,20 @@ class Cartcls(Tk):
 
         self.title("CART WINDOW")
 
-        self.width = 1440
-        self.height = 590
+        # self.width = 1440
+        # self.height = 590
+        # Get screen width and height
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
+
+        # Set window size to 60% of screen width and 70% of screen height
+        self.width = int(screen_width * 0.95)
+        self.height = int(screen_height * 0.9)
+
+        # Center the window
+        self.x_offset = (screen_width - self.width) // 2
+        self.y_offset = (screen_height - self.height) // 2
+
         self.resizable(FALSE, FALSE)
         self.minsize(self.width, self.height)
         self.maxsize(self.width, self.height)
@@ -57,11 +69,11 @@ class Cartcls(Tk):
 
 
 
-        self.set_buttons("Add", 890, 85)
-        self.set_buttons("Update", 1010, 85)
-        self.set_buttons("Delete", 1160, 85)
-        self.set_buttons("Clear", 1300, 85)
-        self.set_buttons("Back", 1330, 8, "back_btn")
+        self.set_buttons("Add", int(self.width * 0.62), 87)
+        self.set_buttons("Update", int(self.width * 0.7), 87)
+        self.set_buttons("Delete", int(self.width * 0.8), 87)
+        self.set_buttons("Clear", int(self.width * 0.9), 87)
+        self.set_buttons("Back", int(self.width * 0.9), 8, "back_btn")
 
 
 
@@ -70,12 +82,12 @@ class Cartcls(Tk):
 
 
     def setgeometry(self):
-        self.geometry(f"{self.width}x{self.height}+{48}+{182}")
+        self.geometry(f"{self.width}x{self.height}+{self.x_offset}+{self.y_offset}")
 
 
 
     def set_cart_frame(self):
-        self.Go_to_cart_frame = Frame(self, height=650, width=1440, bg="#DFD7BF")
+        self.Go_to_cart_frame = Frame(self, height=self.height, width=self.width, bg="#DFD7BF")
         self.Go_to_cart_frame.place(x=0, y=0)
 
 
@@ -83,11 +95,11 @@ class Cartcls(Tk):
 
     def set_sub_frames(self):
         self.sub_frame1 = LabelFrame(self.Go_to_cart_frame, text="Vendor Details", font=("Poor Richard", 20, "bold"),
-                                     height=80, width=1425, bg="#DFD7BF")
+                                     height=80, width=self.width - 20, bg="#DFD7BF")
         self.sub_frame1.place(x=10, y=50)
 
         self.sub_frame2 = LabelFrame(self.Go_to_cart_frame, text="Product Details", font=("Poor Richard", 20, "bold"),
-                                     height=180, width=1425, bg="#DFD7BF")
+                                     height=180, width=self.width - 20, bg="#DFD7BF")
         self.sub_frame2.place(x=10, y=140)
 
         self.v_name = Label(self.sub_frame1, text="Vendor Name :", font=("Poor Richard", 15, "bold"), bg="#DFD7BF")
@@ -99,17 +111,17 @@ class Cartcls(Tk):
 
         self.v_contact = Label(self.sub_frame1, text="Contact Details :",
                                font=("Poor Richard", 15, "bold"), bg="#DFD7BF")
-        self.v_contact.place(x=500, y=10)
+        self.v_contact.place(x=450, y=10)
         self.v_contact_entry = Entry(self.sub_frame1, textvariable=self.vendor_phone,
                                      font=("Poor Richard", 15, "bold"), width=17)
-        self.v_contact_entry.place(x=650, y=10)
+        self.v_contact_entry.place(x=600, y=10)
 
         self.v_address = Label(self.sub_frame1, text="Shop Address :",
                                font=("Poor Richard", 15, "bold"), bg="#DFD7BF")
-        self.v_address.place(x=925, y=10)
+        self.v_address.place(x=850, y=10)
         self.v_address_entry = Entry(self.sub_frame1, textvariable=self.vendor_address,
                                      font=("Poor Richard", 15, "bold"))
-        self.v_address_entry.place(x=1100, y=10)
+        self.v_address_entry.place(x=1020, y=10)
 
         # Product Details
         self.prod_name_lbl = Label(self.sub_frame2, text="Product Name :", font=("Poor Richard", 15, "bold"),
@@ -121,16 +133,16 @@ class Cartcls(Tk):
 
         self.prod_category_lbl = Label(self.sub_frame2, text="Category :", font=("Poor Richard", 15, "bold"),
                                        bg="#DFD7BF")
-        self.prod_category_lbl.place(x=500, y=10)
+        self.prod_category_lbl.place(x=450, y=10)
         self.prod_category_entry = Entry(self.sub_frame2, textvariable=self.p_cat, font=("comic", 15), width=20)
-        self.prod_category_entry.place(x=620, y=10)
+        self.prod_category_entry.place(x=570, y=10)
         self.prod_category_entry.bind("<Button - 3>", self.p_details_search)
 
         self.prod_description_lbl = Label(self.sub_frame2, text="Description :", font=("Poor Richard", 15, "bold")
                                           , bg="#DFD7BF")
-        self.prod_description_lbl.place(x=900, y=10)
+        self.prod_description_lbl.place(x=850, y=10)
         self.prod_description_entry = Entry(self.sub_frame2, textvariable=self.p_desc, font=("comic", 15), width=30)
-        self.prod_description_entry.place(x=1040, y=10)
+        self.prod_description_entry.place(x=970, y=10)
 
         self.prod_stock_lbl = Label(self.sub_frame2, text="Quantity :", font=("Poor Richard", 15, "bold"), bg="#DFD7BF")
         self.prod_stock_lbl.place(x=5, y=60)
@@ -141,9 +153,9 @@ class Cartcls(Tk):
         self.prod_stock_lbl_kg.place(x=350, y=60)
 
         self.prod_price_lbl = Label(self.sub_frame2, text="Price :", font=("Poor Richard", 15, "bold"), bg="#DFD7BF")
-        self.prod_price_lbl.place(x=500, y=60)
+        self.prod_price_lbl.place(x=450, y=60)
         self.prod_price_lbl_entry = Entry(self.sub_frame2, textvariable=self.p_price, font=("comic", 15))
-        self.prod_price_lbl_entry.place(x=600, y=60)
+        self.prod_price_lbl_entry.place(x=550, y=60)
 
         self.status_lbl = Label(self.sub_frame2, text="Status :", font=("Poor Richard", 15, "bold"), bg="#DFD7BF")
         self.status_lbl.place(x=5, y=100)
@@ -187,7 +199,7 @@ class Cartcls(Tk):
 
     def Order_details(self):
         self.O_frame = Frame(self.Go_to_cart_frame, borderwidth=0)
-        self.O_frame.place(x=8, y=375, height=210, width=1423)
+        self.O_frame.place(x=8, y=375, height=int(self.height * 0.4), width=int(self.width * 0.98))
 
         self.xscroll = Scrollbar(self.O_frame, orient=HORIZONTAL)
         self.yscroll = Scrollbar(self.O_frame, orient=VERTICAL)
@@ -655,7 +667,7 @@ class Cartcls(Tk):
     def establish_connection(self):
         """Function for establishing connection with MySQl Database"""
         try:
-            self.connection = mysql.connector.connect(host="localhost", user="root", password="1234",
+            self.connection = mysql.connector.connect(host="localhost", user="root", password="root",
                                                       port="3306", database="FishData")
             self.cursor = self.connection.cursor()
         except Exception as server_error:

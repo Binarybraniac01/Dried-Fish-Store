@@ -12,8 +12,18 @@ class Worker_details_cls(Tk):
 
         self.title("WORKER DETAILS WINDOW")
 
-        self.width = 1440
-        self.height = 590
+        # Get screen width and height
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
+
+        # Set window size to 60% of screen width and 70% of screen height
+        self.width = int(screen_width * 0.95)
+        self.height = int(screen_height * 0.7)
+
+        # Center the window
+        self.x_offset = (screen_width - self.width) // 2
+        self.y_offset = (screen_height - self.height) // 2
+
         self.resizable(FALSE, FALSE)
         self.minsize(self.width, self.height)
         self.maxsize(self.width, self.height)
@@ -51,11 +61,11 @@ class Worker_details_cls(Tk):
 
 
     def setgeometry(self):
-        self.geometry(f"{self.width}x{self.height}+{48}+{182}")
+        self.geometry(f"{self.width}x{self.height}+{self.x_offset}+{self.y_offset}")
 
 
     def set_frame(self):
-        self.worker_frame = Frame(self, bd=4, height=650, width=1450, bg="#DFD7BF")
+        self.worker_frame = Frame(self, bd=4, height=650, width=self.width, bg="#DFD7BF")
         self.worker_frame.place(x=0, y=0)
 
     def child_frame_1(self):
@@ -64,7 +74,7 @@ class Worker_details_cls(Tk):
 
     def child_frame_2(self):
         self.child_frame2 = Frame(self.worker_frame, bd=2, relief=GROOVE, bg="#DFD7BF")
-        self.child_frame2.place(x=700, y=75, height=470, width=650)
+        self.child_frame2.place(x=600, y=75, height=400, width=650)
 
     def set_btn(self, btn_name, x, y, padx=None):
         self.btn = Button(self.child_frame1, text=btn_name, font=("bookman old style", 14, "bold"),
@@ -75,41 +85,41 @@ class Worker_details_cls(Tk):
     def worker_details_ui(self):
         self.name_label = Label(self.child_frame1, text="Worker Name :",
                                 font=("Poor Richard", 20, "bold"), bg="#DFD7BF")
-        self.name_label.place(x=100, y=80)
+        self.name_label.place(x=50, y=80)
         self.phone_label = Label(self.child_frame1, text="Phone No. :",
                                 font=("Poor Richard", 20, "bold"), bg="#DFD7BF")
-        self.phone_label.place(x=100, y=140)
+        self.phone_label.place(x=50, y=140)
         self.email_label = Label(self.child_frame1, text="Gmail :",
                                font=("Poor Richard", 20, "bold"), bg="#DFD7BF")
-        self.email_label.place(x=100, y=200)
+        self.email_label.place(x=50, y=200)
         self.designation_label = Label(self.child_frame1, text="Designation :",
                                  font=("Poor Richard", 20, "bold"), bg="#DFD7BF")
-        self.designation_label.place(x=100, y=260)
+        self.designation_label.place(x=50, y=260)
         self.address_label = Label(self.child_frame1, text="Address :",
                                       font=("Poor Richard", 20, "bold"), bg="#DFD7BF")
-        self.address_label.place(x=100, y=320)
+        self.address_label.place(x=50, y=320)
         self.salary_label = Label(self.child_frame1, text="Salary :",
                                      font=("Poor Richard", 20, "bold"), bg="#DFD7BF")
-        self.salary_label.place(x=100, y=380)
+        self.salary_label.place(x=50, y=380)
 
         self.name_entry = Entry(self.child_frame1, textvariable=self.worker_name,
                                 font=("comic", 20))
-        self.name_entry.place(x=300, y=80, height=30)
+        self.name_entry.place(x=250, y=80, height=30)
         self.phone_entry = Entry(self.child_frame1, textvariable=self.worker_phone_no,
                                 font=("comic", 20))
-        self.phone_entry.place(x=300, y=140, height=30)
+        self.phone_entry.place(x=250, y=140, height=30)
         self.email_entry = Entry(self.child_frame1, textvariable=self.worker_email,
                                 font=("comic", 20))
-        self.email_entry.place(x=300, y=200, height=30)
+        self.email_entry.place(x=250, y=200, height=30)
         self.desig_entry = Entry(self.child_frame1, textvariable=self.worker_designation,
                                 font=("comic", 20))
-        self.desig_entry.place(x=300, y=260, height=30)
+        self.desig_entry.place(x=250, y=260, height=30)
         self.address_entry = Entry(self.child_frame1, textvariable=self.worker_address,
                                 font=("comic", 20))
-        self.address_entry.place(x=300, y=320, height=30)
+        self.address_entry.place(x=250, y=320, height=30)
         self.salary_entry = Entry(self.child_frame1, textvariable=self.worker_salary,
                                 font=("comic", 20))
-        self.salary_entry.place(x=300, y=380, height=30)
+        self.salary_entry.place(x=250, y=380, height=30)
 
 
     def worker_table(self):
@@ -355,10 +365,10 @@ class Worker_details_cls(Tk):
     def worker_dtl_search_bar(self):
         self.search_label = Label(self.worker_frame, text="Search Worker Name : ", bg="#DFD7BF", font=("Poor Richard", 20, "bold"),
                                   borderwidth=0)
-        self.search_label.place(x=700, y=30)
+        self.search_label.place(x=600, y=30)
         self.search_Entry = Entry(self.worker_frame, textvariable=self.worker_search, font=("comic", 20),
                                   borderwidth=0)
-        self.search_Entry.place(x=950, y=30)
+        self.search_Entry.place(x=850, y=30)
         self.search_Entry.bind("<Key>", self.search_worker_dtl)
 
     def search_worker_dtl(self, event):
@@ -398,7 +408,7 @@ class Worker_details_cls(Tk):
     def establish_connection(self):
         """Function for establishing connection with MySQl Database"""
         try:
-            self.connection = mysql.connector.connect(host="localhost", user="root", password="1234",
+            self.connection = mysql.connector.connect(host="localhost", user="root", password="root",
                                                       port="3306", database="FishData")
             self.cursor = self.connection.cursor()
         except Exception as server_error:

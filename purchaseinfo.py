@@ -8,8 +8,20 @@ class Vendorcls(Tk):
     def __init__(self):
         super().__init__()
 
-        self.width = 1450
-        self.height = 770
+        # self.width = 1450
+        # self.height = 770
+        # Get screen width and height
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
+
+        # Set window size to 60% of screen width and 70% of screen height
+        self.width = int(screen_width * 0.95)
+        self.height = int(screen_height * 0.9)
+
+        # Center the window
+        self.x_offset = (screen_width - self.width) // 2
+        self.y_offset = (screen_height - self.height) // 2
+
         self.resizable(FALSE, FALSE)
         self.minsize(self.width, self.height)
         self.maxsize(self.width, self.height)
@@ -33,7 +45,7 @@ class Vendorcls(Tk):
 
 
         # Calling Methods
-        self.geometry()
+        self.setgeometry()
         self.set_main_frame()
         self.set_sub_frames()
         self.Search_bar()
@@ -45,22 +57,22 @@ class Vendorcls(Tk):
 
 
     def setgeometry(self):
-        self.geometry(f"{self.width}x{self.height}+{43}+{5}")
+        self.geometry(f"{self.width}x{self.height}+{self.x_offset}+{self.y_offset}")
 
 
 
     def set_main_frame(self):
-        self.ParentFrame = Frame(self, height=650, width=1450, bg="#DFD7BF")
+        self.ParentFrame = Frame(self, height=self.height, width=self.width, bg="#DFD7BF")
         self.ParentFrame.place(x=0, y=146)
 
 
     def set_sub_frames(self):
         self.sub_frame1 = LabelFrame(self.ParentFrame,text="Vendor Details",font=("Poor Richard", 20, "bold"),
-                                     height=80,width=1430,bg="#DFD7BF")
+                                     height=80,width=self.width - 20,bg="#DFD7BF")
         self.sub_frame1.place(x=10,y=50)
 
         self.sub_frame2 = LabelFrame(self.ParentFrame, text="Product Details", font=("Poor Richard", 20, "bold"),
-                                    height=180, width=1430,bg="#DFD7BF")
+                                    height=180, width=self.width - 20,bg="#DFD7BF")
         self.sub_frame2.place(x=10, y=140)
 
 
@@ -73,17 +85,17 @@ class Vendorcls(Tk):
 
         self.v_contact = Label(self.sub_frame1, text="Contact Details :",
                                font=("Poor Richard", 15, "bold"), bg="#DFD7BF")
-        self.v_contact.place(x=500, y=10)
+        self.v_contact.place(x=450, y=10)
         self.v_contact_entry = Entry(self.sub_frame1, textvariable=self.vendor_phone,
                                      font=("Poor Richard", 15, "bold"), width=17)
-        self.v_contact_entry.place(x=650, y=10)
+        self.v_contact_entry.place(x=600, y=10)
 
         self.v_address = Label(self.sub_frame1, text="Shop Address :",
                                font=("Poor Richard", 15, "bold"),bg="#DFD7BF")
-        self.v_address.place(x=925, y=10)
+        self.v_address.place(x=850, y=10)
         self.v_address_entry = Entry(self.sub_frame1, textvariable=self.vendor_address,
                                      font=("Poor Richard", 15, "bold"))
-        self.v_address_entry.place(x=1100, y=10)
+        self.v_address_entry.place(x=1020, y=10)
 
 
 
@@ -97,15 +109,15 @@ class Vendorcls(Tk):
 
         self.prod_category_lbl = Label(self.sub_frame2, text="Category :", font=("Poor Richard", 15, "bold"),
                                        bg="#DFD7BF")
-        self.prod_category_lbl.place(x=500, y=10)
+        self.prod_category_lbl.place(x=450, y=10)
         self.prod_category_entry = Entry(self.sub_frame2, textvariable=self.p_cat, font=("comic", 15),width=20)
-        self.prod_category_entry.place(x=620, y=10)
+        self.prod_category_entry.place(x=570, y=10)
 
         self.prod_description_lbl = Label(self.sub_frame2, text="Description :", font=("Poor Richard", 15, "bold")
                                           , bg="#DFD7BF")
-        self.prod_description_lbl.place(x=900, y=10)
-        self.prod_description_entry = Entry(self.sub_frame2, textvariable=self.p_desc, font=("comic", 15),width=30)
-        self.prod_description_entry.place(x=1040, y=10)
+        self.prod_description_lbl.place(x=850, y=10)
+        self.prod_description_entry = Entry(self.sub_frame2, textvariable=self.p_desc, font=("comic", 15),width=25)
+        self.prod_description_entry.place(x=970, y=10)
 
         self.prod_stock_lbl = Label(self.sub_frame2, text="Quantity :", font=("Poor Richard", 15, "bold"), bg="#DFD7BF")
         self.prod_stock_lbl.place(x=5, y=60)
@@ -116,9 +128,9 @@ class Vendorcls(Tk):
         self.prod_stock_lbl_kg.place(x=350, y=60)
 
         self.prod_price_lbl = Label(self.sub_frame2, text="Price :", font=("Poor Richard", 15, "bold"),bg="#DFD7BF")
-        self.prod_price_lbl.place(x=500, y=60)
-        self.prod_price_entry = Entry(self.sub_frame2, textvariable=self.p_price, font=("comic", 15))
-        self.prod_price_entry.place(x=600, y=60)
+        self.prod_price_lbl.place(x=450, y=60)
+        self.prod_price_entry = Entry(self.sub_frame2, textvariable=self.p_price, font=("comic", 15), width=15)
+        self.prod_price_entry.place(x=550, y=60)
 
         self.date_lbl = Label(self.sub_frame2, text="Date :", font=("Poor Richard", 15, "bold"), bg="#DFD7BF")
         self.date_lbl.place(x=5, y=100)
@@ -165,7 +177,7 @@ class Vendorcls(Tk):
 
     def Purchase_details(self):
         self.V_frame = Frame(self.ParentFrame, borderwidth=0)
-        self.V_frame.place(x=8, y=385, height=230, width=1430)
+        self.V_frame.place(x=8, y=385, height=int(self.height * 0.22), width=int(self.width * 0.98))
 
         self.xscroll = Scrollbar(self.V_frame, orient=HORIZONTAL)
         self.yscroll = Scrollbar(self.V_frame, orient=VERTICAL)

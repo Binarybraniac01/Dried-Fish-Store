@@ -1,8 +1,8 @@
 from tkinter import *
 import tkinter.messagebox as tmsg
+from PIL import Image, ImageTk
 import subprocess
 import mysql.connector
-from PIL import Image, ImageTk
 
 
 

@@ -9,8 +9,19 @@ class Salescls(Tk):
     def __init__(self):
         super().__init__()
 
-        self.width = 1450
-        self.height = 770
+        # self.width = 1450
+        # self.height = 770
+        # Get screen width and height
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
+
+        # Set window size to 60% of screen width and 70% of screen height
+        self.width = int(screen_width * 0.95)
+        self.height = int(screen_height * 0.9)
+
+        # Center the window
+        self.x_offset = (screen_width - self.width) // 2
+        self.y_offset = (screen_height - self.height) // 2
 
         self.resizable(FALSE, FALSE)
         self.minsize(self.width, self.height)
@@ -37,11 +48,11 @@ class Salescls(Tk):
 
 
     def setgeometry(self):
-        self.geometry(f"{self.width}x{self.height}+{43}+{5}")
+        self.geometry(f"{self.width}x{self.height}+{self.x_offset}+{self.y_offset}")
 
 
     def set_stk_frames(self):
-        self.ParentFrame = Frame(self, height=770, width=1450, bg="#DFD7BF")
+        self.ParentFrame = Frame(self, height=self.height, width=self.width, bg="#DFD7BF")
         self.ParentFrame.place(x=0, y=146)
 
 
@@ -57,7 +68,7 @@ class Salescls(Tk):
 
     def sales_info_table(self):
         self.S_frame = Frame(self.ParentFrame,bd=3,bg="#DFD7BF")
-        self.S_frame.place(x=50,y=100,height=480,width=1350)
+        self.S_frame.place(x=50,y=100,height=int(self.height * 0.6),width=int(self.width * 0.95))
 
         self.scollx = Scrollbar(self.S_frame,orient=HORIZONTAL)
         self.scolly = Scrollbar(self.S_frame, orient=VERTICAL)

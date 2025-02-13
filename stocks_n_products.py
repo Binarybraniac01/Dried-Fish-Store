@@ -7,8 +7,17 @@ class Stockcls(Tk):
     def __init__(self):
         super().__init__()
 
-        self.width = 1450
-        self.height = 770
+        # Get screen width and height
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
+
+        # Set window size to 60% of screen width and 70% of screen height
+        self.width = int(screen_width * 0.95)
+        self.height = int(screen_height * 0.9)
+
+        # Center the window
+        self.x_offset = (screen_width - self.width) // 2
+        self.y_offset = (screen_height - self.height) // 2
 
         self.resizable(FALSE, FALSE)
         self.minsize(self.width, self.height)
@@ -44,17 +53,16 @@ class Stockcls(Tk):
 
 
 
-
     def setgeometry(self):
-        self.geometry(f"{self.width}x{self.height}+{43}+{5}")
+        self.geometry(f"{self.width}x{self.height}+{self.x_offset}+{self.y_offset}")
 
 
 
     def set_stk_frames(self):
-        self.ParentFrame = Frame(self, height=770, width=1450,bg="#DFD7BF")
+        self.ParentFrame = Frame(self, height=self.height, width=self.width,bg="#DFD7BF")
         self.ParentFrame.place(x=0, y=146)
 
-        self.stk_prodFrame = Frame(self.ParentFrame,bd=4, height=770,width=1450,bg="#DFD7BF")
+        self.stk_prodFrame = Frame(self.ParentFrame,bd=4, height=self.height,width=self.width,bg="#DFD7BF")
         self.stk_prodFrame.place(x=0,y=0)
 
         # self.Prod_label()
@@ -66,46 +74,46 @@ class Stockcls(Tk):
     def Prod_label(self):
 
         self.prod_name_lbl = Label(self.stk_prodFrame, text="Product Name :", font=("Poor Richard", 20, "bold"),bg="#DFD7BF")
-        self.prod_name_lbl.place(x=50, y=100)
+        self.prod_name_lbl.place(x=50, y=50)
         self.prod_name_entry = Entry(self.stk_prodFrame, textvariable=self.prod_name, font=("comic", 20))
-        self.prod_name_entry.place(x=300, y=100)
+        self.prod_name_entry.place(x=300, y=50)
 
         self.prod_description_lbl = Label(self.stk_prodFrame, text="Description :", font=("Poor Richard", 20, "bold"),bg="#DFD7BF")
-        self.prod_description_lbl.place(x=50,y=160)
+        self.prod_description_lbl.place(x=50,y=110)
         self.prod_description_entry = Entry(self.stk_prodFrame,textvariable=self.prod_description,font=("comic",20))
-        self.prod_description_entry.place(x=300,y=160)
+        self.prod_description_entry.place(x=300,y=110)
 
         self.prod_category_lbl = Label(self.stk_prodFrame, text="Category :", font=("Poor Richard", 20, "bold"),bg="#DFD7BF")
-        self.prod_category_lbl.place(x=50, y=220)
+        self.prod_category_lbl.place(x=50, y=170)
         self.prod_category_entry = Entry(self.stk_prodFrame, textvariable=self.prod_category, font=("comic", 20))
-        self.prod_category_entry.place(x=300, y=220)
+        self.prod_category_entry.place(x=300, y=170)
 
         self.prod_stock_lbl = Label(self.stk_prodFrame, text="Quantity :", font=("Poor Richard", 20, "bold"),bg="#DFD7BF")
-        self.prod_stock_lbl.place(x=50, y=280)
+        self.prod_stock_lbl.place(x=50, y=230)
         self.prod_stock_entry = Entry(self.stk_prodFrame, textvariable=self.prod_stock, font=("comic", 20),width=15)
-        self.prod_stock_entry.place(x=300, y=280)
+        self.prod_stock_entry.place(x=300, y=230)
         # For KG
         self.prod_stock_lbl_kg = Label(self.stk_prodFrame, text="KG", font=("Poor Richard", 20, "bold"),bg="#DFD7BF")
-        self.prod_stock_lbl_kg.place(x=550, y=280)
+        self.prod_stock_lbl_kg.place(x=550, y=230)
 
 
         self.prod_add_stock_lbl = Label(self.stk_prodFrame, text="Add Quantity :", font=("Poor Richard", 20, "bold"),bg="#DFD7BF")
-        self.prod_add_stock_lbl.place(x=50, y=340)
+        self.prod_add_stock_lbl.place(x=50, y=290)
         self.prod_add_stock_entry = Entry(self.stk_prodFrame, textvariable=self.prod_add_stock, font=("comic", 20),width=15)
-        self.prod_add_stock_entry.place(x=300, y=340)
+        self.prod_add_stock_entry.place(x=300, y=290)
         # for KG
         self.prod_add_stock_lbl_kg = Label(self.stk_prodFrame, text="KG", font=("Poor Richard", 20, "bold"),bg="#DFD7BF")
-        self.prod_add_stock_lbl_kg.place(x=550, y=340)
+        self.prod_add_stock_lbl_kg.place(x=550, y=290)
 
         self.prod_price_lbl = Label(self.stk_prodFrame, text="Total Cost Price :", font=("Poor Richard", 20, "bold"),bg="#DFD7BF")
-        self.prod_price_lbl.place(x=50, y=400)
+        self.prod_price_lbl.place(x=50, y=350)
         self.prod_price_entry = Entry(self.stk_prodFrame, textvariable=self.prod_price, font=("comic", 20))
-        self.prod_price_entry.place(x=300, y=400)
+        self.prod_price_entry.place(x=300, y=350)
 
         self.prod_sp_price_lbl = Label(self.stk_prodFrame, text="S.P. Per KG :", font=("Poor Richard", 20, "bold"), bg="#DFD7BF")
-        self.prod_sp_price_lbl.place(x=50, y=460)
+        self.prod_sp_price_lbl.place(x=50, y=410)
         self.prod_sp_price_entry = Entry(self.stk_prodFrame, textvariable=self.prod_sp_price, font=("comic", 20))
-        self.prod_sp_price_entry.place(x=300, y=460)
+        self.prod_sp_price_entry.place(x=300, y=410)
 
 
 
@@ -123,10 +131,10 @@ class Stockcls(Tk):
     def search_bar(self):
 
         self.search_Lable = Label(self.stk_prodFrame,text="Search Product By Name :",font=("Poor Richard", 20, "bold"),borderwidth=0,bg="#DFD7BF")
-        self.search_Lable.place(x=700,y=60)
+        self.search_Lable.place(x=650,y=50)
 
         self.search_Lable_entry = Entry(self.stk_prodFrame,textvariable=self.Prod_search,font=("comic", 20),borderwidth=0)
-        self.search_Lable_entry.place(x=1000,y=60)
+        self.search_Lable_entry.place(x=950,y=50)
         self.search_Lable_entry.bind("<Key>",self.search)
 
 
@@ -137,7 +145,7 @@ class Stockcls(Tk):
     def Product_table(self):
 
         self.P_frame = Frame(self.stk_prodFrame,bd=3,bg="#DFD7BF")
-        self.P_frame.place(x=700,y=100,height=480,width=720)
+        self.P_frame.place(x=640,y=90,height=int(self.height * 0.6),width=int(self.width * 0.5))
 
         self.scollx = Scrollbar(self.P_frame,orient=HORIZONTAL)
         self.scolly = Scrollbar(self.P_frame, orient=VERTICAL)

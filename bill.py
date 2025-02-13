@@ -10,8 +10,20 @@ class Receipt(Tk):
     def __init__(self):
         super().__init__()
 
-        self.width = 1450
-        self.height = 770
+        # self.width = 1450
+        # self.height = 770
+        # Get screen width and height
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
+
+        # Set window size to 60% of screen width and 70% of screen height
+        self.width = int(screen_width * 0.95)
+        self.height = int(screen_height * 0.9)
+
+        # Center the window
+        self.x_offset = (screen_width - self.width) // 2
+        self.y_offset = (screen_height - self.height) // 2
+
         self.resizable(FALSE, FALSE)
         self.minsize(self.width, self.height)
         self.maxsize(self.width, self.height)
@@ -49,10 +61,10 @@ class Receipt(Tk):
 
 
     def setgeometry(self):
-        self.geometry(f"{self.width}x{self.height}+{43}+{5}")
+        self.geometry(f"{self.width}x{self.height}+{self.x_offset}+{self.y_offset}")
 
     def set_frames(self):
-        self.recpt_Frame = Frame(self, height=770, width=1450, bg="#DFD7BF")
+        self.recpt_Frame = Frame(self, height=self.height, width=self.width, bg="#DFD7BF")
         self.recpt_Frame.place(x=0, y=146)
 
     def child_frame_1(self):
@@ -61,7 +73,7 @@ class Receipt(Tk):
 
     def child_frame_2(self):
         self.child_frame2 = Frame(self.recpt_Frame, bd=2, relief=GROOVE, bg="#DFD7BF")
-        self.child_frame2.place(x=800, y=40, height=550, width=510)
+        self.child_frame2.place(x=750, y=40, height=500, width=510)
 
     def set_btn(self, btn_name, x, y, padx):
         self.btn = Button(self.child_frame1, text=btn_name, font=("bookman old style", 14, "bold"),
@@ -74,29 +86,29 @@ class Receipt(Tk):
     def billing_ui(self):
         self.customer_name_label = Label(self.child_frame1, text="Customer Name :",
                                          font=("Poor Richard", 20, "bold"), bg="#DFD7BF")
-        self.customer_name_label.place(x=100, y=100)
+        self.customer_name_label.place(x=100, y=50)
         self.customer_contact_label = Label(self.child_frame1, text="Contact No. :",
                                             font=("Poor Richard", 20, "bold"), bg="#DFD7BF")
-        self.customer_contact_label.place(x=100, y=160)
+        self.customer_contact_label.place(x=100, y=110)
         self.product_name_label = Label(self.child_frame1, text="Product Name :",
                                         font=("Poor Richard", 20, "bold"), bg="#DFD7BF")
-        self.product_name_label.place(x=100, y=220)
+        self.product_name_label.place(x=100, y=170)
         self.product_category_label = Label(self.child_frame1, text="category :",
                                         font=("Poor Richard", 20, "bold"), bg="#DFD7BF")
-        self.product_category_label.place(x=100, y=280)
+        self.product_category_label.place(x=100, y=230)
         self.product_quantity_label = Label(self.child_frame1, text="Quantity :",
                                             font=("Poor Richard", 20, "bold"), bg="#DFD7BF")
-        self.product_quantity_label.place(x=100, y=340)
+        self.product_quantity_label.place(x=100, y=290)
         # self.product_price_label = Label(self.child_frame1, text="Price",
         #                           font=("Poor Richard", 20, "bold"), bg="#DFD7BF")
         # self.product_price_label.place(x=2, y=310)
 
         self.customer_name_entry = Entry(self.child_frame1, textvariable=self.bill_cust_name,
                                          font=("comic", 20))
-        self.customer_name_entry.place(x=300, y=100, height=30)
+        self.customer_name_entry.place(x=300, y=50, height=30)
         self.customer_contact_entry = Entry(self.child_frame1, textvariable=self.bill_cust_phone,
                                             font=("comic", 20))
-        self.customer_contact_entry.place(x=300, y=160, height=30)
+        self.customer_contact_entry.place(x=300, y=110, height=30)
 
         sql_query = (
             "SELECT `name`, `category`, `quantity` FROM `product_table`"
@@ -110,27 +122,27 @@ class Receipt(Tk):
             prod_names.append(val[0])
         self.product_name_entry_combo = ttk.Combobox(self.child_frame1, values=list(set(prod_names)),
                                                      textvariable=self.bill_prod_name, font=("comic", 20), width=19)
-        self.product_name_entry_combo.place(x=300, y=220, height=30)
+        self.product_name_entry_combo.place(x=300, y=170, height=30)
         self.product_name_entry_combo.bind("<<ComboboxSelected>>", self.update_category_combo)
 
         # Product Category
         self.l_prod_category = []
         self.product_category_entry_combo = ttk.Combobox(self.child_frame1, values=self.l_prod_category,
                                                          textvariable=self.bill_prod_category, font=("comic", 20), width=19)
-        self.product_category_entry_combo.place(x=300, y=280, height=30)
+        self.product_category_entry_combo.place(x=300, y=230, height=30)
         self.product_category_entry_combo.bind("<<ComboboxSelected>>", self.show_available_stock)
 
 
         # Products Quantity
         self.product_quantity_entry = Entry(self.child_frame1, textvariable=self.bill_prod_quantity,
                                             font=("comic", 20))
-        self.product_quantity_entry.place(x=300, y=340, height=30)
+        self.product_quantity_entry.place(x=300, y=290, height=30)
 
         # Available Stock In Inventory
         self.product_curr_stock = Label(self.child_frame1, text=f"Available Stock : ",
                                         font=("Bookman Old Style", 14, "bold"),
                                         bg="#DFD7BF")
-        self.product_curr_stock.place(x=100, y=400)
+        self.product_curr_stock.place(x=100, y=350)
 
 
 

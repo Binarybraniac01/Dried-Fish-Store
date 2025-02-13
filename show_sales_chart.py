@@ -13,14 +13,20 @@ class SalesChartCls(Tk):
         self.title("Sales Chart")
         # self.state('zoomed')
 
-        self.width = 1440
-        self.height = 650
+        # self.width = 1440
+        # self.height = 650
 
-        # self.screen_width = self.winfo_screenwidth()
-        # self.screen_height = self.winfo_screenheight()
-        # self.x = (self.screen_width / 2) - (self.width / 2)
-        # self.y = (self.screen_height / 2) - (self.height / 2)
-        # self.dash_geometry = f"{self.width}x{self.height}+{int(self.x)}+{int(self.y)}"
+        # Get screen width and height
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
+
+        # Set window size to 60% of screen width and 70% of screen height
+        self.width = int(screen_width * 0.95)
+        self.height = int(screen_height * 0.9)
+
+        # Center the window
+        self.x_offset = (screen_width - self.width) // 2
+        self.y_offset = (screen_height - self.height) // 2
 
         self.resizable(FALSE, FALSE)
         self.minsize(self.width, self.height)
@@ -48,12 +54,12 @@ class SalesChartCls(Tk):
 
 
     def setgeometry(self):
-        self.geometry(f"{self.width}x{self.height}+{208}+{262}")
+        self.geometry(f"{self.width}x{self.height}+{self.x_offset}+{self.y_offset}")
 
 
     def set_chart_frame(self):
         self.chart_frame = Frame(self)
-        self.chart_frame.place(x=0, y=0, height=650, width=1440)
+        self.chart_frame.place(x=0, y=0, height=self.height, width=self.width)
 
     def getting_graph_data(self):
         '''Execute the SQL query to get the product quantity data for each month'''
@@ -121,7 +127,7 @@ class SalesChartCls(Tk):
     def establish_connection(self):
         """Function for establishing connection with MySQl Database"""
         try:
-            self.connection = mysql.connector.connect(host="localhost", user="root", password="1234",
+            self.connection = mysql.connector.connect(host="localhost", user="root", password="root",
                                                       port="3306", database="FishData")
             self.cursor = self.connection.cursor()
         except Exception as server_error:

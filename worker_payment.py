@@ -8,8 +8,18 @@ class WorkerPaymentCls(Tk):
     def __init__(self):
         super().__init__()
 
-        self.width = 1450
-        self.height = 770
+        # Get screen width and height
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
+
+        # Set window size to 60% of screen width and 70% of screen height
+        self.width = int(screen_width * 0.95)
+        self.height = int(screen_height * 0.9)
+
+        # Center the window
+        self.x_offset = (screen_width - self.width) // 2
+        self.y_offset = (screen_height - self.height) // 2
+
         self.resizable(FALSE, FALSE)
         self.minsize(self.width, self.height)
         self.maxsize(self.width, self.height)
@@ -28,11 +38,11 @@ class WorkerPaymentCls(Tk):
 
 
     def setgeometry(self):
-        self.geometry(f"{self.width}x{self.height}+{43}+{5}")
+        self.geometry(f"{self.width}x{self.height}+{self.x_offset}+{self.y_offset}")
 
 
     def set_frame(self):
-        self.worker_frame = Frame(self, bd=4, height=650, width=1450, bg="#DFD7BF")
+        self.worker_frame = Frame(self, bd=4, height=self.height, width=self.width, bg="#DFD7BF")
         self.worker_frame.place(x=0, y=146)
 
     def child_frame_1(self):
@@ -41,7 +51,7 @@ class WorkerPaymentCls(Tk):
 
     def child_frame_2(self):
         self.child_frame2 = Frame(self.worker_frame, bd=2, relief=GROOVE, bg="#DFD7BF")
-        self.child_frame2.place(x=700, y=110, height=470, width=650)
+        self.child_frame2.place(x=600, y=110, height=400, width=650)
 
     def set_btn(self, btn_name, x, y, padx=10, btntype=None):
         if btntype == None:
@@ -253,10 +263,10 @@ class WorkerPaymentCls(Tk):
     def worker_pay_search_bar(self):
         self.search_label = Label(self.worker_frame, text="Search Worker Name : ", bg="#DFD7BF", font=("Poor Richard", 20, "bold"),
                                   borderwidth=0)
-        self.search_label.place(x=700, y=70)
+        self.search_label.place(x=600, y=70)
         self.search_Entry = Entry(self.worker_frame, textvariable=self.worker_pay_search, font=("comic", 20),
                                   borderwidth=0, width=20)
-        self.search_Entry.place(x=950, y=70)
+        self.search_Entry.place(x=850, y=70)
         self.search_Entry.bind("<Key>", self.search_worker_pay)
 
     def search_worker_pay(self, event):

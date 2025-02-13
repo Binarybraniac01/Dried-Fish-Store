@@ -102,22 +102,24 @@ class Dashboardcls(Tk):
 
 
 
-        self.width = 1450
-        self.height = 770
+        # self.width = 1450
+        # self.height = 770
+        # Get screen width and height
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
+
+        # Set window size to 60% of screen width and 70% of screen height
+        self.width = int(screen_width * 0.95)
+        self.height = int(screen_height * 0.9)
+
+        # Center the window
+        self.x_offset = (screen_width - self.width) // 2
+        self.y_offset = (screen_height - self.height) // 2
+
         self.resizable(FALSE, FALSE)
         self.minsize(self.width, self.height)
         self.maxsize(self.width, self.height)
         self.protocol('WM_DELETE_WINDOW', self.dash_close)
-
-
-
-
-        # self.screen_width = self.winfo_screenwidth()
-        # self.screen_height = self.winfo_screenheight()
-        # self.x = (self.screen_width / 2) - (self.width / 2)
-        # print(self.x)
-        # self.y = (self.screen_height / 2) - (self.height / 2)
-        # print(self.y)
 
 
 
@@ -144,49 +146,41 @@ class Dashboardcls(Tk):
 
         # setting buttons on NavBar
         self.nav_buttons("Home")
-        self.button.place(x=80, y=5)
+        self.button.place(x=int(self.width * 0.08), y=5)
         self.button.bind("<Button-1>", self.clicked)
 
         # self.nav_buttons("Profile")
         # self.button.place(x=200, y=5)
 
         self.nav_buttons("Stocks")
-        self.button.place(x=240, y=5)
+        self.button.place(x=int(self.width * 0.18), y=5)
         self.button.bind("<Button-1>", self.clicked)
 
         self.nav_buttons("Sales")
-        self.button.place(x=400, y=5)
+        self.button.place(x=int(self.width * 0.28), y=5)
         self.button.bind("<Button-1>", self.clicked)
 
         self.nav_buttons("Vendor Transactions")
-        self.button.place(x=540, y=5)
+        self.button.place(x=int(self.width * 0.38), y=5)
         self.button.bind("<Button-1>", self.clicked)
 
         self.nav_buttons("Customer Details")
-        self.button.place(x=790, y=5)
+        self.button.place(x=int(self.width * 0.56), y=5)
         self.button.bind("<Button-1>", self.clicked)
 
         self.nav_buttons("Receipt")
-        self.button.place(x=1030, y=5)
+        self.button.place(x=int(self.width * 0.73), y=5)
         self.button.bind("<Button-1>", self.clicked)
 
         self.nav_buttons("Worker Payments")
-        self.button.place(x=1200, y=5)
+        self.button.place(x=int(self.width * 0.83), y=5)
         self.button.bind("<Button-1>", self.clicked)
-
-
-
-
-
-
-
-
 
 
 
 
     def setgeometry(self):
-        self.geometry(f"{self.width}x{self.height}+{43}+{5}")
+        self.geometry(f"{self.width}x{self.height}+{self.x_offset}+{self.y_offset}")
 
     def set_heading_label(self):
         self.heading_label = Label(self, text="Premium Dry Fish Store", font=("Times New Roman", 28, "bold"), bd=4, relief=RIDGE,
@@ -494,10 +488,10 @@ class Dashboardcls(Tk):
         Stockcls.Product_table(self)
 
         # Buttons
-        Stockcls.stk_bttons(self, "Add", x=50, y=530)
-        Stockcls.stk_bttons(self, "Update", x=180, y=530)
-        Stockcls.stk_bttons(self, "Delete", x=310, y=530)
-        Stockcls.stk_bttons(self, "Clear", x=440, y=530)
+        Stockcls.stk_bttons(self, "Add", x=50, y=480)
+        Stockcls.stk_bttons(self, "Update", x=180, y=480)
+        Stockcls.stk_bttons(self, "Delete", x=310, y=480)
+        Stockcls.stk_bttons(self, "Clear", x=440, y=480)
 
         Stockcls.check_inventory_quantity(self)
 
@@ -509,12 +503,12 @@ class Dashboardcls(Tk):
         Vendorcls.Purchase_details(self)
 
         # Buttons
-        Vendorcls.Buttons(self,"Add", 890, 85)
-        Vendorcls.Buttons(self,"Update", 1000, 85)
-        Vendorcls.Buttons(self,"Delete", 1150, 85)
-        Vendorcls.Buttons(self,"Clear", 1300, 85)
-        Vendorcls.Buttons(self,"GO TO CART", 1268, 8, "cart_btn")
-        Vendorcls.Buttons(self,"Purchase Chart",1000,8,"Chart")
+        Vendorcls.Buttons(self,"Add", int(self.width * 0.62), 90)
+        Vendorcls.Buttons(self,"Update", int(self.width * 0.7), 90)
+        Vendorcls.Buttons(self,"Delete", int(self.width * 0.8), 90)
+        Vendorcls.Buttons(self,"Clear", int(self.width * 0.9), 90)
+        Vendorcls.Buttons(self,"GO TO CART", int(self.width * 0.65), 8, "cart_btn")
+        Vendorcls.Buttons(self,"Purchase Chart",int(self.width * 0.85),8,"Chart")
 
     def receipt_window(self):
         Receipt.set_frames(self)
@@ -524,11 +518,11 @@ class Dashboardcls(Tk):
         Receipt.bill_screen(self)
 
         # Buttons
-        Receipt.set_btn(self, "Add", 100, 460, 25)
-        Receipt.set_btn(self, "Delete", 250, 460,10)
-        Receipt.set_btn(self, "Clear", 400, 460, 20)
-        Receipt.set_btn(self, "Total", 550, 460, 20)
-        Receipt.set_btn(self, "Receipt", 100, 520, 20)
+        Receipt.set_btn(self, "Add", 100, 410, 25)
+        Receipt.set_btn(self, "Delete", 250, 410,10)
+        Receipt.set_btn(self, "Clear", 400, 410, 20)
+        Receipt.set_btn(self, "Total", 550, 410, 20)
+        Receipt.set_btn(self, "Receipt", 100, 470, 20)
 
 
 
@@ -537,7 +531,7 @@ class Dashboardcls(Tk):
         Salescls.search_bar(self)
         Salescls.sales_info_table(self)
 
-        Salescls.chart_btn(self,"Sales Chart",1200,10)
+        Salescls.chart_btn(self,"Sales Chart",int(self.width * 0.8),10)
 
 
 
@@ -549,10 +543,10 @@ class Dashboardcls(Tk):
         Customercls.Customer_table(self)
 
         # Buttons
-        Customercls.cust_bttons(self, "Add", x=50, y=500)
-        Customercls.cust_bttons(self, "Update", x=180, y=500)
-        Customercls.cust_bttons(self, "Delete", x=310, y=500)
-        Customercls.cust_bttons(self, "Clear", x=440, y=500)
+        Customercls.cust_bttons(self, "Add", x=50, y=450)
+        Customercls.cust_bttons(self, "Update", x=180, y=450)
+        Customercls.cust_bttons(self, "Delete", x=310, y=450)
+        Customercls.cust_bttons(self, "Clear", x=440, y=450)
 
 
 
@@ -567,9 +561,9 @@ class Dashboardcls(Tk):
         WorkerPaymentCls.worker_table(self)
 
         # Buttons
-        WorkerPaymentCls.set_btn(self, "Update",  x=100, y=500)
-        WorkerPaymentCls.set_btn(self, "Clear", x=370, y=500, padx=20)
-        WorkerPaymentCls.set_btn(self, "Worker Details", 1200, 10, 20, "details")
+        WorkerPaymentCls.set_btn(self, "Update",  x=100, y=470)
+        WorkerPaymentCls.set_btn(self, "Clear", x=370, y=470, padx=20)
+        WorkerPaymentCls.set_btn(self, "Worker Details", int(self.width * 0.8), 10, 20, "details")
 
 
 
