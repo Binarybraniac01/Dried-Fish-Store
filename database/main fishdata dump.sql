@@ -74,7 +74,7 @@ CREATE TABLE `customer_table` (
 
 LOCK TABLES `customer_table` WRITE;
 /*!40000 ALTER TABLE `customer_table` DISABLE KEYS */;
-INSERT INTO `customer_table` VALUES (13,'Sahil Sutar',NULL,'2365978654',NULL,365),(14,'Dinesh Thakur',NULL,'2566728920',NULL,507),(15,'Swapnil Patil',NULL,'5648785432',NULL,468),(16,'Rahul Shinde',NULL,'5163215687',NULL,672),(17,'Vedant Kadam',NULL,'8765345678',NULL,1088),(18,'Amit Ambavkar',NULL,'8379987749',NULL,666);
+INSERT INTO `customer_table` VALUES (13,'Sahil Sutar',NULL,'2365978654',NULL,365),(14,'Dinesh Thakur',NULL,'2566728920',NULL,507),(15,'Swapnil Patil',NULL,'5648785432',NULL,468),(16,'Rahul Shinde',NULL,'5163215687',NULL,672),(17,'Vedant Kadam',NULL,'8765345678',NULL,1088);
 /*!40000 ALTER TABLE `customer_table` ENABLE KEYS */;
 UNLOCK TABLES;
 
