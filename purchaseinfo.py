@@ -286,7 +286,7 @@ class Vendorcls(Tk):
             self.insert_query = (
                 "INSERT INTO `vendor_table`(`v_name`, `v_contact`, `v_address`,`name`,  `category`, `description`,"
                 " `quantity`, `price`, `date`) "
-                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)")
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")
             vals = (self.vendor_name.get(), self.vendor_phone.get(), self.vendor_address.get(), self.p_name.get(),
                     self.p_cat.get(), self.p_desc.get(), self.p_stock.get(), self.p_price.get(), self.p_date.get())
             self.cursor.execute(self.insert_query, vals)
@@ -295,7 +295,7 @@ class Vendorcls(Tk):
 
             # Todo : Add quantity and product in product table
             # self.check_n = self.p_name.get()
-            self.check_query = ("select * from product_table where `name`=%s")
+            self.check_query = ("select * from product_table where `name`=?")
             vals = (self.p_name.get(),)
             self.cursor.execute(self.check_query, vals)
             self.result = self.cursor.fetchall()
@@ -306,7 +306,7 @@ class Vendorcls(Tk):
                 self.check_n = self.p_name.get()
 
                 self.updated_stk = self.stk_n + self.check_stk
-                self.add_query = ("UPDATE `product_table` SET `quantity` = %s WHERE `name`=%s")
+                self.add_query = ("UPDATE `product_table` SET `quantity` = ? WHERE `name`=?")
                 self.vals = (self.updated_stk, self.check_n)
                 self.cursor.execute(self.add_query, self.vals)
                 tmsg.showinfo("Success", "Transaction Added Successfully")
@@ -314,7 +314,7 @@ class Vendorcls(Tk):
             else:
                 self.p_insert_query = (
                     "INSERT INTO `product_table`( `name`, `description`, `category`, `quantity`, `price`, `date`) "
-                    "VALUES (%s, %s, %s, %s, %s, %s)")
+                    "VALUES (?, ?, ?, ?, ?, ?)")
                 vals = (self.p_name.get(), self.p_desc.get(), self.p_cat.get(),
                         self.p_stock.get(),self.p_price.get(), self.p_date.get())
                 self.cursor.execute(self.p_insert_query, vals)
@@ -361,9 +361,9 @@ class Vendorcls(Tk):
                 or self.p_date.get() == ""):
             tmsg.showwarning(title="Validation", message="All fields must be filled correctly")
         else:
-            self.update_query = ("UPDATE `vendor_table` SET `v_name` = %s, `v_contact` = %s, `v_address` = %s, "
-                                 "`name` = %s, `category` = %s, `description` = %s, `quantity` = %s, `price` = %s,"
-                                 " `date` = %s WHERE `Tran_id` = %s")
+            self.update_query = ("UPDATE `vendor_table` SET `v_name` = ?, `v_contact` = ?, `v_address` = ?, "
+                                 "`name` = ?, `category` = ?, `description` = ?, `quantity` = ?, `price` = ?,"
+                                 " `date` = ? WHERE `Tran_id` = ?")
             vals = (self.vendor_name.get(), self.vendor_phone.get(), self.vendor_address.get(), self.p_name.get(),
                          self.p_cat.get(), self.p_desc.get(), self.p_stock.get(), self.p_price.get(), self.p_date.get(),
                          self.Transaction_id.get())
@@ -373,7 +373,7 @@ class Vendorcls(Tk):
 
 
             # Todo : Update the updated quantity
-            self.pur_check_query = ("select * from product_table where `name`=%s")
+            self.pur_check_query = ("select * from product_table where `name`=?")
             vals = (self.p_name.get(),)
             self.cursor.execute(self.pur_check_query, vals)
             self.result = self.cursor.fetchall()
@@ -385,7 +385,7 @@ class Vendorcls(Tk):
                 self.minus_stk = self.reference_stk
 
                 self.updated_stk = self.stk_n + self.check_stk - self.minus_stk
-                self.pur_query = ("UPDATE `product_table` SET `quantity` = %s WHERE `name`=%s")
+                self.pur_query = ("UPDATE `product_table` SET `quantity` = ? WHERE `name`=?")
                 self.vals = (self.updated_stk, self.check_n)
                 self.cursor.execute(self.pur_query, self.vals)
             else:
@@ -431,7 +431,7 @@ class Vendorcls(Tk):
                 or self.p_date.get() == ""):
             tmsg.showwarning(title="Validation", message="All fields must be filled correctly")
         else:
-            self.del_query = ("DELETE from `vendor_table` WHERE `Tran_id` = %s")
+            self.del_query = ("DELETE from `vendor_table` WHERE `Tran_id` = ?")
             vals = (self.Transaction_id.get(),)
             self.cursor.execute(self.del_query, vals)
             print("deleted from database")

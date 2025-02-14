@@ -136,7 +136,7 @@ class Profilecls(Tk):
 
 
     def add_profile_info(self):
-        search_query = ("select * from `login_table` where `username` = %s ")
+        search_query = ("select * from `login_table` where `username` = ? ")
         vals = (self.user_name.get(),)
         self.cursor.execute(search_query, vals)
         result = self.cursor.fetchall()
@@ -149,7 +149,7 @@ class Profilecls(Tk):
             self.curr_date.set(joining_date)
             self.insert_query = (
                 "INSERT INTO `login_table`( `pname`, `username`, `password`, `date`) "
-                "VALUES (%s, %s, %s, %s)")
+                "VALUES (?, ?, ?, ?)")
             vals = (self.profile_name.get(), self.user_name.get(), self.user_pass.get(), self.curr_date.get())
             self.cursor.execute(self.insert_query, vals)
             self.connection.commit()

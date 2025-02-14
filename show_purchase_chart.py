@@ -1,5 +1,6 @@
 from tkinter import *
-import mysql.connector
+# import mysql.connector
+import sqlite3
 import tkinter.messagebox as tmsg
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg,NavigationToolbar2Tk
@@ -60,21 +61,60 @@ class PurchaseChartCls(Tk):
         self.chart_frame = Frame(self, bg="#DFD7BF")
         self.chart_frame.place(x=0, y=0, height=self.height, width=self.width)
 
+    # def getting_graph_data(self):
+    #     '''Execute the SQL query to get the product quantity data for each month'''
+
+    #     self.sql_qury = ("SELECT MONTH(date), SUM(quantity) AS quantity FROM"
+    #                      " vendor_table GROUP BY MONTH(date)")
+    #     self.cursor.execute(self.sql_qury)
+
+    #     # Fetch all the results from the cursor
+    #     results = self.cursor.fetchall()
+    #     # self.connection.commit()
+
+    #     # Map month numbers to their corresponding month names
+    #     month_names = {
+    #         1: "Jan",
+    #         2: "Feb",
+    #         3: "Mar",
+    #         4: "Apr",
+    #         5: "May",
+    #         6: "Jun",
+    #         7: "Jul",
+    #         8: "Aug",
+    #         9: "Sep",
+    #         10: "Oct",
+    #         11: "Nov",
+    #         12: "Dec"
+    #     }
+
+    #     # Iterate through the results and add the product quantity data to the dictionary
+    #     for row in results:
+    #         month_number = row[0]
+    #         month_name = month_names[month_number]
+    #         product_quantity = int(row[1])
+
+    #         self.product_quantity_by_month[month_name] = product_quantity
+
+    #     # Print the dictionary
+    #     # print(self.product_quantity_by_month)
+
     def getting_graph_data(self):
         '''Execute the SQL query to get the product quantity data for each month'''
-
-        self.sql_qury = ("SELECT MONTH(date), SUM(quantity) AS quantity FROM"
-                         " vendor_table GROUP BY MONTH(date)")
+        
+        # Modified query for SQLite using strftime to get month number
+        self.sql_qury = ("SELECT CAST(strftime('%m', date) AS INTEGER), SUM(quantity) AS quantity FROM "
+                            "vendor_table GROUP BY strftime('%m', date)")
         self.cursor.execute(self.sql_qury)
-
+        
         # Fetch all the results from the cursor
         results = self.cursor.fetchall()
         # self.connection.commit()
-
+        
         # Map month numbers to their corresponding month names
         month_names = {
             1: "Jan",
-            2: "Feb",
+            2: "Feb", 
             3: "Mar",
             4: "Apr",
             5: "May",
@@ -86,18 +126,17 @@ class PurchaseChartCls(Tk):
             11: "Nov",
             12: "Dec"
         }
-
+        
         # Iterate through the results and add the product quantity data to the dictionary
         for row in results:
-            month_number = row[0]
+            month_number = row[0]  # SQLite returns month as string, but we cast it to INTEGER in query
             month_name = month_names[month_number]
             product_quantity = int(row[1])
-
+            
             self.product_quantity_by_month[month_name] = product_quantity
-
+            
         # Print the dictionary
         # print(self.product_quantity_by_month)
-
 
 
     def show_chart(self):
@@ -124,16 +163,29 @@ class PurchaseChartCls(Tk):
 
 
 
+    # def establish_connection(self):
+    #     """Function for establishing connection with MySQl Database"""
+    #     try:
+    #         self.connection = mysql.connector.connect(host="localhost", user="root", password="root",
+    #                                                   port="3306", database="FishData")
+    #         self.cursor = self.connection.cursor()
+    #     except Exception as server_error:
+    #         print(f"Error: {server_error}")
+    #         tmsg.showwarning("Server Issue", "Can't connect to MySQL server."
+    #                                          "\nCheck connection")
     def establish_connection(self):
-        """Function for establishing connection with MySQl Database"""
+        """Function for establishing connection with SQLite Database"""
         try:
-            self.connection = mysql.connector.connect(host="localhost", user="root", password="root",
-                                                      port="3306", database="FishData")
+            # Connect to the SQLite database file
+            self.connection = sqlite3.connect('fishdata.db')
             self.cursor = self.connection.cursor()
-        except Exception as server_error:
-            print(f"Error: {server_error}")
-            tmsg.showwarning("Server Issue", "Can't connect to MySQL server."
-                                             "\nCheck connection")
+            return True
+        except Exception as db_error:
+            print(f"Error: {db_error}")
+            tmsg.showwarning("Database Issue", 
+                           "Can't connect to SQLite database.\nMake sure 'fishdata.db' exists in the current directory")
+            return False
+        
 
 
     def chart_close(self):

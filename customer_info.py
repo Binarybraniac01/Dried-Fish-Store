@@ -192,7 +192,7 @@ class Customercls(Tk):
             tmsg.showwarning(title="Validation", message="All fields must be filled")
 
         else:
-            search_query = ("select * from `customer_table` where `cust_name` = %s AND `cust_contact`= %s ")
+            search_query = ("select * from `customer_table` where `cust_name` = ? AND `cust_contact`= ? ")
             vals = (self.cust_name.get(), self.cust_contact.get())
             self.cursor.execute(search_query, vals)
             result = self.cursor.fetchall()
@@ -202,7 +202,7 @@ class Customercls(Tk):
             else:
                 self.insert_query = (
                     "INSERT INTO `customer_table`( `cust_name`, `cust_mail`, `cust_contact`, `cust_address`) "
-                    "VALUES (%s, %s, %s, %s)")
+                    "VALUES (?, ?, ?, ?)")
                 vals = (self.cust_name.get(), self.cust_mail.get(), self.cust_contact.get(), self.cust_address.get())
                 self.cursor.execute(self.insert_query, vals)
                 self.connection.commit()
@@ -229,7 +229,7 @@ class Customercls(Tk):
                     tmsg.showerror(title="Connection Error", message="Unable to connect the MySql server")
 
 
-        # search_query = ("select * from `customer_table` where `cust_name` = %s AND `cust_contact`= %s ")
+        # search_query = ("select * from `customer_table` where `cust_name` = ? AND `cust_contact`= ? ")
         # vals = (self.cust_name.get(), self.cust_contact.get())
         # self.cursor.execute(search_query, vals)
         # result = self.cursor.fetchall()
@@ -239,7 +239,7 @@ class Customercls(Tk):
         # else:
         #     self.insert_query = (
         #         "INSERT INTO `customer_table`( `cust_name`, `cust_mail`, `cust_contact`, `cust_address`) "
-        #         "VALUES (%s, %s, %s, %s)")
+        #         "VALUES (?, ?, ?, ?)")
         #     vals = (self.cust_name.get(), self.cust_mail.get(), self.cust_contact.get(), self.cust_address.get())
         #     self.cursor.execute(self.insert_query, vals)
         #     self.connection.commit()
@@ -271,8 +271,8 @@ class Customercls(Tk):
             tmsg.showwarning(title="Validation", message="All fields must be filled")
 
         else:
-            self.update_query = ("UPDATE `customer_table` SET `cust_name` = %s, `cust_mail` = %s, `cust_contact` = %s,`cust_address` = %s "
-                                 "WHERE `cust_id` = %s ")
+            self.update_query = ("UPDATE `customer_table` SET `cust_name` = ?, `cust_mail` = ?, `cust_contact` = ?,`cust_address` = ? "
+                                 "WHERE `cust_id` = ? ")
             vals = (
             self.cust_name.get(), self.cust_mail.get(), self.cust_contact.get(), self.cust_address.get(), self.cust_id.get())
             self.cursor.execute(self.update_query, vals)
@@ -305,7 +305,7 @@ class Customercls(Tk):
                 self.cust_contact.get() == "" or self.cust_address.get() == ""):
             tmsg.showwarning(title="Validation", message="All fields must be filled")
         else:
-            self.del_query = ("DELETE from `customer_table` WHERE `cust_id` = %s")
+            self.del_query = ("DELETE from `customer_table` WHERE `cust_id` = ?")
             vals = (self.cust_id.get(),)
             self.cursor.execute(self.del_query, vals)
             print("deleted from database")

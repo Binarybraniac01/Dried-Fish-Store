@@ -1,7 +1,8 @@
 import tkinter
 from tkinter import *
 from tkinter import ttk,messagebox
-import mysql.connector
+# import mysql.connector
+import sqlite3
 import tkinter.messagebox as tmsg
 import datetime
 import sys
@@ -264,7 +265,7 @@ class Cartcls(Tk):
 
 
     def v_details_search(self,event):
-        self.v_check_query = ("select * from vendor_table where `v_name`=%s")
+        self.v_check_query = ("select * from vendor_table where `v_name`=?")
         vals = (self.vendor_name.get(),)
         self.cursor.execute(self.v_check_query, vals)
         self.result = self.cursor.fetchall()
@@ -278,7 +279,7 @@ class Cartcls(Tk):
 
 
     def p_details_search(self,event):
-        self.p_check_query = ("select * from vendor_table where `name`=%s AND `category`=%s")
+        self.p_check_query = ("select * from vendor_table where `name`=? AND `category`=?")
         vals = (self.p_name.get(), self.p_cat.get())
         self.cursor.execute(self.p_check_query, vals)
         self.result = self.cursor.fetchall()
@@ -337,7 +338,7 @@ class Cartcls(Tk):
 
         else:
             # Todo : If entry exist then ask user  if he approves to Add new entry
-            self.check_query = ("select * from booking_table where `v_name`=%s AND `name`=%s AND `category`=%s")
+            self.check_query = ("select * from booking_table where `v_name`=? AND `name`=? AND `category`=?")
             vals = (self.vendor_name.get(),self.p_name.get(),self.p_cat.get())
             self.cursor.execute(self.check_query, vals)
             # self.connection.commit()
@@ -352,7 +353,7 @@ class Cartcls(Tk):
                     self.insert_query = (
                         "INSERT INTO `booking_table`(`v_name`, `v_contact`, `v_address`,`name`,  `category`, `description`,"
                         " `quantity`, `price`,`status`, `date`) "
-                        "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)")
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
                     vals = (self.vendor_name.get(), self.vendor_phone.get(), self.vendor_address.get(), self.p_name.get(),
                             self.p_cat.get(), self.p_desc.get(), self.p_stock.get(), self.p_price.get(), self.p_status.get(),
                             self.p_date.get())
@@ -407,7 +408,7 @@ class Cartcls(Tk):
                 self.insert_query = (
                     "INSERT INTO `booking_table`(`v_name`, `v_contact`, `v_address`,`name`,  `category`, `description`,"
                     " `quantity`, `price`,`status`, `date`) "
-                    "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)")
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
                 vals = (
                     self.vendor_name.get(), self.vendor_phone.get(), self.vendor_address.get(), self.p_name.get(),
                     self.p_cat.get(), self.p_desc.get(), self.p_stock.get(), self.p_price.get(), self.p_status.get(),
@@ -458,9 +459,9 @@ class Cartcls(Tk):
         else:
             joining_date = str(datetime.datetime.now().strftime("%y-%m-%d"))
             self.p_date.set(joining_date)
-            self.update_query = ("UPDATE `booking_table` SET `v_name` = %s, `v_contact` = %s, `v_address` = %s, "
-                                 "`name` = %s, `category` = %s, `description` = %s, `quantity` = %s, `price` = %s,"
-                                 " `status` = %s, `date` = %s WHERE `Tran_id` = %s")
+            self.update_query = ("UPDATE `booking_table` SET `v_name` = ?, `v_contact` = ?, `v_address` = ?, "
+                                 "`name` = ?, `category` = ?, `description` = ?, `quantity` = ?, `price` = ?,"
+                                 " `status` = ?, `date` = ? WHERE `Tran_id` = ?")
             vals = (self.vendor_name.get(), self.vendor_phone.get(), self.vendor_address.get(), self.p_name.get(),
                     self.p_cat.get(), self.p_desc.get(), self.p_stock.get(), self.p_price.get(), self.p_status.get(),
                     self.p_date.get(), self.Transaction_id.get())
@@ -471,7 +472,7 @@ class Cartcls(Tk):
 
             # Todo : Update the status and add it to purchase table and delete from booking
             self.r_status = 'Order Received'
-            self.check_query = ("select * from booking_table where `status`=%s")
+            self.check_query = ("select * from booking_table where `status`=?")
             self.vals = (self.r_status,)
             self.cursor.execute(self.check_query, self.vals)
             self.result = self.cursor.fetchall()
@@ -492,7 +493,7 @@ class Cartcls(Tk):
                 # Todo : Purchase tabel done
                 self.insert_query = ("INSERT INTO `vendor_table`(`v_name`, `v_contact`, `v_address`,`name`, "
                                      "`category`, `description`, `quantity`, `price`, `date`) "
-                                     "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)")
+                                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")
                 self.vals = (self.n_vendor_name, self.n_vendor_phone, self.n_vendor_address, self.n_p_name,
                              self.n_p_cat, self.n_p_desc, self.n_p_stock, self.n_p_price, self.n_p_date)
                 self.cursor.execute(self.insert_query, self.vals)
@@ -504,7 +505,7 @@ class Cartcls(Tk):
 
                 # Todo : Add quantity and product in product table
                 # self.check_n = self.n_p_name.get()
-                self.check_query = ("select * from product_table where `name`=%s")
+                self.check_query = ("select * from product_table where `name`=?")
                 self.vals = (self.n_p_name,)
                 self.cursor.execute(self.check_query, self.vals)
                 self.p_result = self.cursor.fetchall()
@@ -515,7 +516,7 @@ class Cartcls(Tk):
                     self.check_n = self.n_p_name
 
                     self.updated_stk = self.stk_n + self.check_stk
-                    self.add_query = ("UPDATE `product_table` SET `quantity` = %s WHERE `name`=%s")
+                    self.add_query = ("UPDATE `product_table` SET `quantity` = ? WHERE `name`=?")
                     self.vals = (self.updated_stk, self.check_n)
                     self.cursor.execute(self.add_query, self.vals)
                     self.connection.commit()
@@ -524,7 +525,7 @@ class Cartcls(Tk):
                 else:
                     self.p_insert_query = (
                         "INSERT INTO `product_table`( `name`, `description`, `category`, `quantity`, `price`, `date`) "
-                        "VALUES (%s, %s, %s, %s, %s, %s)")
+                        "VALUES (?, ?, ?, ?, ?, ?)")
                     self.vals = (self.n_p_name, self.n_p_desc, self.n_p_cat, self.n_p_stock, self.n_p_price, self.n_p_date)
                     self.cursor.execute(self.p_insert_query, self.vals)
                     self.connection.commit()
@@ -532,7 +533,7 @@ class Cartcls(Tk):
 
 
                 # ToDo : deleting status received query from booking table
-                self.del_query = ("DELETE from `booking_table` WHERE `name` = %s AND `category` = %s AND `status` = %s ")
+                self.del_query = ("DELETE from `booking_table` WHERE `name` = ? AND `category` = ? AND `status` = ? ")
                 self.vals = (self.n_p_name,self.n_p_cat,self.r_status)
                 self.cursor.execute(self.del_query,self.vals)
                 self.connection.commit()
@@ -582,7 +583,7 @@ class Cartcls(Tk):
                 or self.p_status.get() == ""):
             tmsg.showwarning(title="Validation", message="All fields must be filled correctly")
         else:
-            self.del_query = ("DELETE from `booking_table` WHERE `Tran_id` = %s")
+            self.del_query = ("DELETE from `booking_table` WHERE `Tran_id` = ?")
             vals = (self.Transaction_id.get(),)
             self.cursor.execute(self.del_query, vals)
             print("deleted from database")
@@ -664,17 +665,29 @@ class Cartcls(Tk):
             self.clear_order_fields()
 
 
+    # def establish_connection(self):
+    #     """Function for establishing connection with MySQl Database"""
+    #     try:
+    #         self.connection = mysql.connector.connect(host="localhost", user="root", password="root",
+    #                                                   port="3306", database="FishData")
+    #         self.cursor = self.connection.cursor()
+    #     except Exception as server_error:
+    #         print(f"Error: {server_error}")
+    #         tmsg.showwarning("Server Issue", "Can't connect to MySQL server."
+    #                                          "\nCheck connection")
     def establish_connection(self):
-        """Function for establishing connection with MySQl Database"""
+        """Function for establishing connection with SQLite Database"""
         try:
-            self.connection = mysql.connector.connect(host="localhost", user="root", password="root",
-                                                      port="3306", database="FishData")
+            # Connect to the SQLite database file
+            self.connection = sqlite3.connect('fishdata.db')
             self.cursor = self.connection.cursor()
-        except Exception as server_error:
-            print(f"Error: {server_error}")
-            tmsg.showwarning("Server Issue", "Can't connect to MySQL server."
-                                             "\nCheck connection")
-
+            return True
+        except Exception as db_error:
+            print(f"Error: {db_error}")
+            tmsg.showwarning("Database Issue", 
+                           "Can't connect to SQLite database.\nMake sure 'fishdata.db' exists in the current directory")
+            return False
+        
 
     def set_back(self, ev):
         self.destroy()

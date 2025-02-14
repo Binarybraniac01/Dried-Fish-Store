@@ -170,7 +170,7 @@ class Receipt(Tk):
         # checking if invoice_id is already present or not
         self.invoice_no = rd.randint(1000, 10000)
         check_invoice = (
-            "SELECT `transaction_id` FROM `sales_table` WHERE `invoice_id` = %s"
+            "SELECT `transaction_id` FROM `sales_table` WHERE `invoice_id` = ?"
         )
         vals = (self.invoice_no,)
         self.cursor.execute(check_invoice, vals)
@@ -221,7 +221,7 @@ class Receipt(Tk):
         else:
 
             fetch_prod_price = (
-                "SELECT `pid`, `price`, `quantity`, `sp_price` from `product_table` WHERE `name`=%s and `category`=%s"
+                "SELECT `pid`, `price`, `quantity`, `sp_price` from `product_table` WHERE `name`=? and `category`=?"
             )
             vals = (self.bill_prod_name.get(), self.bill_prod_category.get())
             self.cursor.execute(fetch_prod_price, vals)
@@ -307,7 +307,7 @@ class Receipt(Tk):
         if self.bill_prod_name.get() != "":
 
             filter_query = (
-                "SELECT `category` FROM `product_table` WHERE `name`=%s"
+                "SELECT `category` FROM `product_table` WHERE `name`=?"
             )
             val = (self.bill_prod_name.get(),)
             self.cursor.execute(filter_query, val)
@@ -325,7 +325,7 @@ class Receipt(Tk):
 
     def show_available_stock(self, event):
         search_stock = (
-            "SELECT `quantity` FROM `product_table` WHERE `name`=%s and `category`=%s"
+            "SELECT `quantity` FROM `product_table` WHERE `name`=? and `category`=?"
         )
         vals = (self.product_name_entry_combo.get(), self.product_category_entry_combo.get())
         self.cursor.execute(search_stock, vals)
@@ -345,7 +345,7 @@ class Receipt(Tk):
 
         bill_date = str(datetime.datetime.now().strftime("%y-%m-%d"))
         self.billing_date.set(bill_date)
-        bill_time = str(datetime.datetime.now().strftime("%I:%M:%S"))
+        bill_time = str(datetime.datetime.now().strftime("%I:%M:?"))
         self.billing_time.set(bill_time)
 
         # ----------------- #
@@ -356,7 +356,7 @@ class Receipt(Tk):
 
             # Fetch required product info from Product Table
             fetch_query = (
-                "SELECT `name`, `category`, `quantity`, `price` FROM `product_table` WHERE `pid` = %s"
+                "SELECT `name`, `category`, `quantity`, `price` FROM `product_table` WHERE `pid` = ?"
             )
             val = (prod_id,)
             self.cursor.execute(fetch_query, val)
@@ -372,7 +372,7 @@ class Receipt(Tk):
                 new_stock = float(old_stock - quant)
 
                 update_query = (
-                    "UPDATE `product_table` SET `quantity` = %s where `pid` = %s"
+                    "UPDATE `product_table` SET `quantity` = ? where `pid` = ?"
                 )
                 update_vals = (new_stock, prod_id)
                 self.cursor.execute(update_query, update_vals)
@@ -383,7 +383,7 @@ class Receipt(Tk):
                 new_pri_for_table = result[0][3] - total_price
 
                 update_f_query = (
-                    "UPDATE `product_table` SET `price` = %s where `pid` = %s"
+                    "UPDATE `product_table` SET `price` = ? where `pid` = ?"
                 )
                 update_f_vals = (new_pri_for_table, prod_id)
                 self.cursor.execute(update_f_query, update_f_vals)
@@ -395,7 +395,7 @@ class Receipt(Tk):
                 # Inserting Corresponding Values to the Sales Table and Committing the Connection
                 sales_insert_query = (
                     "INSERT INTO `sales_table` (`invoice_id`, `pname`, `category`, `quantity`, "
-                    "`price`, `cust_name`, `cust_phone`, `date`, `time`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                    "`price`, `cust_name`, `cust_phone`, `date`, `time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
                 )
                 sales_vals = (self.invoice_id.get(), str(result[0][0]), str(result[0][1]), quant,
                               total_price, self.bill_cust_name.get(), self.bill_cust_phone.get(),
@@ -408,7 +408,7 @@ class Receipt(Tk):
 
                 # Inserting Corresponding Values to the Customer Table and Committing the Connection
                 cust_query = (
-                    "SELECT * FROM `customer_table` WHERE `cust_name` = %s AND `cust_contact` = %s"
+                    "SELECT * FROM `customer_table` WHERE `cust_name` = ? AND `cust_contact` = ?"
                 )
                 val = (self.bill_cust_name.get(), self.bill_cust_phone.get())
                 self.cursor.execute(cust_query, val)
@@ -418,7 +418,7 @@ class Receipt(Tk):
                     old_pri = int(c_result[0][5])
                     new_pri = int(old_pri + total_price)
                     update_cust_query = (
-                        "UPDATE `customer_table` SET `total_purchase` = %s where `cust_name` = %s AND `cust_contact` = %s"
+                        "UPDATE `customer_table` SET `total_purchase` = ? where `cust_name` = ? AND `cust_contact` = ?"
                     )
                     update_cust_vals = (new_pri,self.bill_cust_name.get(), self.bill_cust_phone.get())
                     self.cursor.execute(update_cust_query, update_cust_vals)
@@ -426,7 +426,7 @@ class Receipt(Tk):
                 else:
                     cust_insert_query = (
                         "INSERT INTO `customer_table` (`cust_name`, `cust_contact`, `total_purchase`) "
-                        "VALUES (%s, %s, %s)"
+                        "VALUES (?, ?, ?)"
                     )
                     insrt_vals = (self.bill_cust_name.get(), self.bill_cust_phone.get(),total_price)
                     self.cursor.execute(cust_insert_query, insrt_vals)

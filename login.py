@@ -2,7 +2,8 @@ from tkinter import *
 import tkinter.messagebox as tmsg
 from PIL import Image, ImageTk
 import subprocess
-import mysql.connector
+# import mysql.connector
+import sqlite3
 
 
 
@@ -102,7 +103,7 @@ class login_page(Tk):
             self.username = self.user.get()
             self.password = self.pasw.get()
 
-            self.sql_query = "select * from login_table where username = %s and password = %s"
+            self.sql_query = "select * from login_table where username = ? and password = ?"
 
             self.cursor.execute(self.sql_query, [self.username, self.password])
             self.results = self.cursor.fetchall()
@@ -131,7 +132,7 @@ class login_page(Tk):
             self.username = self.user.get()
             self.password = self.pasw.get()
 
-            self.sql_query = "select * from login_table where username = %s and password = %s"
+            self.sql_query = "select * from login_table where username = ? and password = ?"
 
             self.cursor.execute(self.sql_query, [self.username, self.password])
             self.results = self.cursor.fetchall()
@@ -158,17 +159,28 @@ class login_page(Tk):
 
 
 
+    # def establish_connection(self):
+    #     """Function for establishing connection with MySQl Database"""
+    #     try:
+    #         self.connection = mysql.connector.connect(host="localhost", user="root", password="root",
+    #                                                   port="3306", database="FishData")
+    #         self.cursor = self.connection.cursor()
+    #     except Exception as server_error:
+    #         print(f"Error: {server_error}")
+    #         tmsg.showwarning("Server Issue", "Can't connect to MySQL server."
+    #                                          "\nCheck connection")
     def establish_connection(self):
-        """Function for establishing connection with MySQl Database"""
+        """Function for establishing connection with SQLite Database"""
         try:
-            self.connection = mysql.connector.connect(host="localhost", user="root", password="root",
-                                                      port="3306", database="FishData")
+            # Connect to the SQLite database file
+            self.connection = sqlite3.connect('fishdata.db')
             self.cursor = self.connection.cursor()
-        except Exception as server_error:
-            print(f"Error: {server_error}")
-            tmsg.showwarning("Server Issue", "Can't connect to MySQL server."
-                                             "\nCheck connection")
-
+            return True
+        except Exception as db_error:
+            print(f"Error: {db_error}")
+            tmsg.showwarning("Database Issue", 
+                           "Can't connect to SQLite database.\nMake sure 'fishdata.db' exists in the current directory")
+            return False
 
 
 if __name__ == '__main__':

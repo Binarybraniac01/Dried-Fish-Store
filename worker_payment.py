@@ -210,8 +210,8 @@ class WorkerPaymentCls(Tk):
                 remaining_salary = int(self.pay_worker_salary.get()) - salary_paid
                 self.payment_pending.set(remaining_salary)
 
-                self.update_query = ("UPDATE `worker_table` SET `name` = %s, `designation` = %s, `salary` = %s, "
-                                     "`payment_done` = %s, `payment_pending` = %s WHERE `id` = %s")
+                self.update_query = ("UPDATE `worker_table` SET `name` = ?, `designation` = ?, `salary` = ?, "
+                                     "`payment_done` = ?, `payment_pending` = ? WHERE `id` = ?")
                 self.vals = (self.pay_worker_name.get(), self.pay_worker_designation.get(), self.pay_worker_salary.get(),
                              self.payment_done.get(), self.payment_pending.get(), self.pay_worker_id.get())
                 self.cursor.execute(self.update_query, self.vals)

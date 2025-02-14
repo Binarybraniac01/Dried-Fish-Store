@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
-import mysql.connector
+# import mysql.connector
+import sqlite3
 import tkinter.messagebox as tmsg
 import datetime
 import sys
@@ -210,7 +211,7 @@ class Worker_details_cls(Tk):
                 or self.worker_address.get() == "" or self.worker_salary.get() == 0):
             tmsg.showwarning(title="Validation", message="All fields must be filled")
         else:
-            search_query = ("select * from `worker_table` where `email` = %s and `phone` = %s")
+            search_query = ("select * from `worker_table` where `email` = ? and `phone` = ?")
             vals = (self.worker_email.get(), self.worker_phone_no.get())
             self.cursor.execute(search_query, vals)
             result = self.cursor.fetchall()
@@ -228,7 +229,7 @@ class Worker_details_cls(Tk):
                 self.insert_query = (
                     "INSERT INTO `worker_table`(`name`, `phone`, `email`, `designation`, `address`, `salary`, "
                     "`joining_date`, `payment_done`, `payment_pending`) "
-                    "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)")
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")
                 self.vals = (self.worker_name.get(), self.worker_phone_no.get(), self.worker_email.get(),
                              self.worker_designation.get(), self.worker_address.get(), self.worker_salary.get(),
                              self.worker_joining_date.get(), self.payment_done_.get(), self.payment_pending_.get())
@@ -266,7 +267,7 @@ class Worker_details_cls(Tk):
             salary = int(self.worker_salary.get())
             # Checking if provided salary is already available with requested worker id / worker name
             search_salary = ("select `payment_done` from `worker_table` "
-                             "where `id` = %s and `salary` = %s")
+                             "where `id` = ? and `salary` = ?")
             vals = (self.worker_id.get(), salary)
             self.cursor.execute(search_salary, vals)
             result = self.cursor.fetchall()
@@ -275,8 +276,8 @@ class Worker_details_cls(Tk):
             if result:
                 #  if results contains values
                 #  as condition evaluates true worker_data will update normally
-                self.update_query = ("UPDATE `worker_table` SET `name` = %s, `phone` = %s, `email` = %s, "
-                                     "`designation` = %s, `address` = %s, `salary` = %s WHERE `id` = %s")
+                self.update_query = ("UPDATE `worker_table` SET `name` = ?, `phone` = ?, `email` = ?, "
+                                     "`designation` = ?, `address` = ?, `salary` = ? WHERE `id` = ?")
                 self.vals = (self.worker_name.get(), self.worker_phone_no.get(), self.worker_email.get(),
                              self.worker_designation.get(), self.worker_address.get(), self.worker_salary.get(),
                              self.worker_id.get())
@@ -287,7 +288,7 @@ class Worker_details_cls(Tk):
                 # if result contains no values
                 # if the salary doesn't match with existing salary then the exiting salary will get updated with new one
                 # along with other necessary changes .
-                fetch_paid_amount = ("select `payment_done` from `worker_table` where `id` = %s")
+                fetch_paid_amount = ("select `payment_done` from `worker_table` where `id` = ?")
                 vals = (self.worker_id.get(),)
                 self.cursor.execute(fetch_paid_amount, vals)
                 result = self.cursor.fetchall()
@@ -295,9 +296,9 @@ class Worker_details_cls(Tk):
                 payment_pending = int(salary) - int(amount_paid)
                 print(payment_pending)
 
-                self.update_query = ("UPDATE `worker_table` SET `name` = %s, `phone` = %s, `email` = %s, "
-                                     "`designation` = %s, `address` = %s, `salary` = %s, `payment_pending` = %s "
-                                     "WHERE `id` = %s")
+                self.update_query = ("UPDATE `worker_table` SET `name` = ?, `phone` = ?, `email` = ?, "
+                                     "`designation` = ?, `address` = ?, `salary` = ?, `payment_pending` = ? "
+                                     "WHERE `id` = ?")
                 self.vals = (self.worker_name.get(), self.worker_phone_no.get(), self.worker_email.get(),
                              self.worker_designation.get(), self.worker_address.get(), self.worker_salary.get(),
                              payment_pending, self.worker_id.get())
@@ -333,7 +334,7 @@ class Worker_details_cls(Tk):
         else:
             answer = tmsg.askyesno("Confirmation", "Are you sure want to delete the worker ?")
             if answer:
-                self.delete_query = ("DELETE FROM `worker_table` WHERE `id` = %s")
+                self.delete_query = ("DELETE FROM `worker_table` WHERE `id` = ?")
                 print(self.worker_id.get())
                 self.vals = (self.worker_id.get(),)
                 self.cursor.execute(self.delete_query, self.vals)
@@ -405,17 +406,28 @@ class Worker_details_cls(Tk):
         sys.exit()
 
 
+    # def establish_connection(self):
+    #     """Function for establishing connection with MySQl Database"""
+    #     try:
+    #         self.connection = mysql.connector.connect(host="localhost", user="root", password="root",
+    #                                                   port="3306", database="FishData")
+    #         self.cursor = self.connection.cursor()
+    #     except Exception as server_error:
+    #         print(f"Error: {server_error}")
+    #         tmsg.showwarning("Server Issue", "Can't connect to MySQL server."
+    #                                          "\nCheck connection")
     def establish_connection(self):
-        """Function for establishing connection with MySQl Database"""
+        """Function for establishing connection with SQLite Database"""
         try:
-            self.connection = mysql.connector.connect(host="localhost", user="root", password="root",
-                                                      port="3306", database="FishData")
+            # Connect to the SQLite database file
+            self.connection = sqlite3.connect('fishdata.db')
             self.cursor = self.connection.cursor()
-        except Exception as server_error:
-            print(f"Error: {server_error}")
-            tmsg.showwarning("Server Issue", "Can't connect to MySQL server."
-                                             "\nCheck connection")
-
+            return True
+        except Exception as db_error:
+            print(f"Error: {db_error}")
+            tmsg.showwarning("Database Issue", 
+                           "Can't connect to SQLite database.\nMake sure 'fishdata.db' exists in the current directory")
+            return False
 
 if __name__ == '__main__':
     worker = Worker_details_cls()

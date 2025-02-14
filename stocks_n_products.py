@@ -234,7 +234,7 @@ class Stockcls(Tk):
             tmsg.showwarning(title="Validation", message="All fields must be filled")
 
         else:
-            search_query = ("select * from `product_table` where `name` = %s ")
+            search_query = ("select * from `product_table` where `name` = ? ")
             vals = (self.prod_name.get(),)
             self.cursor.execute(search_query, vals)
             result = self.cursor.fetchall()
@@ -247,7 +247,7 @@ class Stockcls(Tk):
                 self.curr_date.set(joining_date)
                 self.insert_query = (
                     "INSERT INTO `product_table`( `name`, `description`, `category`, `quantity`, `price`, `date`, `sp_price`) "
-                    "VALUES (%s, %s, %s, %s, %s, %s, %s)")
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)")
                 vals = (
                 self.prod_name.get(), self.prod_description.get(), self.prod_category.get(), self.prod_stock.get(),
                 self.prod_price.get(), self.curr_date.get(), self.prod_sp_price.get())
@@ -302,8 +302,8 @@ class Stockcls(Tk):
                 or self.prod_stock.get() == 0.0 or self.prod_sp_price.get() == 0):
             tmsg.showwarning(title="Validation", message="All fields must be filled")
         else:
-            self.update_query = ("UPDATE `product_table` SET `name` = %s, `description` = %s, `category` = %s, "
-                                 "`quantity` = %s, `price` = %s, `sp_price` = %s WHERE `pid` = %s")
+            self.update_query = ("UPDATE `product_table` SET `name` = ?, `description` = ?, `category` = ?, "
+                                 "`quantity` = ?, `price` = ?, `sp_price` = ? WHERE `pid` = ?")
             self.vals = (self.name, self.description, self.category, self.current_stock, self.price, self.selling_price, self.id)
             self.cursor.execute(self.update_query, self.vals)
             self.connection.commit()
@@ -343,7 +343,7 @@ class Stockcls(Tk):
         else:
             # self.id = self.prod_id.get()
             # print(self.id)
-            self.del_query = ("DELETE from `product_table` WHERE `pid` = %s")
+            self.del_query = ("DELETE from `product_table` WHERE `pid` = ?")
             vals = (self.prod_id.get(),)
             self.cursor.execute(self.del_query, vals)
             print("deleted from database")
