@@ -384,7 +384,7 @@ class Vendorcls(Tk):
                 self.check_n = self.p_name.get()
                 self.minus_stk = self.reference_stk
 
-                self.updated_stk = self.stk_n + self.check_stk - self.minus_stk
+                self.updated_stk = float(self.stk_n) + self.check_stk - float(self.minus_stk)
                 self.pur_query = ("UPDATE `product_table` SET `quantity` = ? WHERE `name`=?")
                 self.vals = (self.updated_stk, self.check_n)
                 self.cursor.execute(self.pur_query, self.vals)
